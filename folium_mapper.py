@@ -24,6 +24,8 @@ class Folium_Mapper:
                                  icon=folium.Icon(color="blue",icon="cogs", prefix="fa")
                                  ).add_to(self.mapObject)
     
+    # icon list: https://fontawesome.com/v4.7/icons/
+    
     def create_distributor_markers(self):
         for city in self.distributions.city:
             folium.Marker(location= [self.all_cities[self.all_cities['city'] == city].lat.iloc[0], 
