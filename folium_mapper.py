@@ -15,33 +15,50 @@ class Folium_Mapper:
         self.model = model
         self.mapObject = None
 
+
+    def create_supplier_markers(self):
+        for city in self.suppliers.city:
+            folium.Marker(location= [self.all_cities[self.all_cities['city'] == city].lat.iloc[0], 
+                                 self.all_cities[self.all_cities['city'] == city].long.iloc[0]],
+                                 popup = "This is a Supplier!",
+                                 icon=folium.Icon(color="blue",icon="cogs", prefix="fa")
+                                 ).add_to(self.mapObject)
+    
+    def create_distributor_markers(self):
+        for city in self.distributions.city:
+            folium.Marker(location= [self.all_cities[self.all_cities['city'] == city].lat.iloc[0], 
+                                 self.all_cities[self.all_cities['city'] == city].long.iloc[0]],
+                                 popup = "This is a Distribution Center!",
+                                 icon=folium.Icon(color="red",icon="truck", prefix="fa")
+                                 ).add_to(self.mapObject)
+            
+    def create_consumer_markers(self):         
+        for city in self.consumers.city:
+            folium.Marker(location= [self.all_cities[self.all_cities['city'] == city].lat.iloc[0], 
+                                 self.all_cities[self.all_cities['city'] == city].long.iloc[0]],
+                                 popup = "This is a Consumer!",
+                                 icon=folium.Icon(color="green",icon="user", prefix="fa")
+                                 ).add_to(self.mapObject)
+            
 # use the Map function from folium to generate a map
 # create map object with folium.Map()
     def build_map(self):
-        mapObject = folium.Map(location = [29,-95],
+        self.mapObject = folium.Map(location = [29,-95],
                               zoom_start = 3)
-        # create markers with .Marker
-        for city in self.suppliers.city:
-            folium.Marker(location= [self.all_cities[self.all_cities['city'] == city].lat.iloc[0], self.all_cities[self.all_cities['city'] == city].long.iloc[0]],
-                                     popup = "This is a marker!",
-                                     icon=folium.Icon(color="blue",icon="cloud")
-                                     ).add_to(mapObject)
-        for city in self.distributions.city:
-            folium.Marker(location= [self.all_cities[self.all_cities['city'] == city].lat.iloc[0], self.all_cities[self.all_cities['city'] == city].long.iloc[0]],
-                                     popup = "This is a marker!",
-                                     icon=folium.Icon(color="red",icon="cloud")
-                                     ).add_to(mapObject)
         
-        for city in self.consumers.city:
-            folium.Marker(location= [self.all_cities[self.all_cities['city'] == city].lat.iloc[0], self.all_cities[self.all_cities['city'] == city].long.iloc[0]],
-                                     popup = "This is a marker!",
-                                     icon=folium.Icon(color="green",icon="cloud")
-                                     ).add_to(mapObject)
+        # create markers with .Marker
+        self.create_supplier_markers()
+        self.create_distributor_markers()
+        self.create_consumer_markers()
+
+
         # add marker to map
         def build_line(city1, city2):
-            coords_1 = [self.all_cities[self.all_cities['city'] == city1].lat.iloc[0], self.all_cities[self.all_cities['city'] == city1].long.iloc[0]]
-            coords_2 = [self.all_cities[self.all_cities['city'] == city2].lat.iloc[0], self.all_cities[self.all_cities['city'] == city2].long.iloc[0]]
-            folium.PolyLine(locations=[coords_1, coords_2],weight=3).add_to(mapObject)
+            coords_1 = [self.all_cities[self.all_cities['city'] == city1].lat.iloc[0], 
+                        self.all_cities[self.all_cities['city'] == city1].long.iloc[0]]
+            coords_2 = [self.all_cities[self.all_cities['city'] == city2].lat.iloc[0], 
+                        self.all_cities[self.all_cities['city'] == city2].long.iloc[0]]
+            folium.PolyLine(locations=[coords_1, coords_2],weight=3).add_to(self.mapObject)
             return
         
         # gross way to do this, but works for now
@@ -59,7 +76,5 @@ class Folium_Mapper:
         for route in routes:
             build_line(route[0], route[1])
             
-        self.mapObject = mapObject
-
     def save_map(self, filename):
         self.mapObject.save(filename)
