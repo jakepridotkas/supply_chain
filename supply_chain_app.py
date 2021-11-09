@@ -32,6 +32,13 @@ consumers['demand'] = [10, 15, 5, 8, 10, 50, 20, 10]
 
 all_cities = pd.concat([suppliers, distributions, consumers])
 
+# SIDEBAR BABY
+with st.sidebar:
+    st.write("""
+            ### Hello
+            Links, facts, sliders.
+            """)
+
 # If map is not already drawn then generate it
 #if not os.path.isfile('index.html'):   
 optimizer = Optimizer(suppliers, distributions, consumers, all_cities)
@@ -45,7 +52,7 @@ mapper.save_map('index.html')
 
 st.write(optimizer.model_status)
 st.write(optimizer.formatted_total_cost)
-st.write('Calculated based on ____')
+st.write('Calculated based on $1/mile shipping rate')
 #else:
 #    print('skipping optimization, file still here')
 
@@ -88,7 +95,7 @@ if submit:
     
     st.write(new_optimizer.model_status)
     st.write(new_optimizer.formatted_total_cost)
-    st.write('Calculated based on ____')
+    st.write('Calculated based on $1/mile shipping rate')
     st.write('Cost difference of: ${:,}'.format(int(optimizer.total_cost - new_optimizer.total_cost)))
         
     HtmlFile = open('new_index.html', 'r', encoding='utf-8')
@@ -100,3 +107,5 @@ if submit:
     <h6></h6>
     """, unsafe_allow_html=True
     )
+    
+

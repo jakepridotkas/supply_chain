@@ -43,7 +43,7 @@ class Optimizer:
                             lowBound=0, upBound=None)
         
         # Define Objective Function
-        COST_PER_MILE = 17 #Arbitrary mileage cost
+        COST_PER_MILE = 1 #Arbitrary mileage cost
         model += (lpSum([self.get_distance(i,j) * x[(i,j)] * COST_PER_MILE for i in self.suppliers['city'] for j in self.distributions['city']]) + \
                   lpSum([self.get_distance(i,j) * y[(i,j)] * COST_PER_MILE for i in self.distributions['city'] for j in self.consumers['city']]))
             
