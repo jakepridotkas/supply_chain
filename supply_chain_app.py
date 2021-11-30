@@ -10,6 +10,7 @@ import streamlit.components.v1 as components
 
 from optimizer import *
 from folium_mapper import *
+from PIL import Image
 
 import os.path
 import sys
@@ -19,25 +20,31 @@ import folium
 st.write("""
 # Supply Chain Vizualization
 Playing around with linear programming of supply chains.  Add new distribuition center below to see effect on network.
+The goal is to have a flexible tool to solve problems like in the image below.
 """)
+image = Image.open('./img/network.png')
+st.image(image, caption='Optimized Network')
 
+# SETUP: This could eventually be read in from file or shipping database or something
 #random suppliers, distribution centers, and customers with demand
-
 suppliers = get_coords(['Des Moines', 'Iowa City', 'Cleveland', 'San Antonio'])
 distributions = get_coords(['Houston'])
 consumers = get_coords(['Destin', 'LA', 'Boston', 'Minneapolis', 'San Francisco', 'Miami', 'Charlotte', 'Boise'])
-
 # give consumers some number of demand
 consumers['demand'] = [10, 15, 5, 8, 10, 50, 20, 10]
-
 all_cities = pd.concat([suppliers, distributions, consumers])
 
 # SIDEBAR BABY
 with st.sidebar:
     st.write("""
-            ### Hello
-            Links, facts, sliders.
+            ### Optimizer Controls
+            Here we can adjust the objective function to prioritize cost or Co2 output.
+            Not implemented at the moment
             """)
+    st.select_slider("Objective:", ["Cost", "Emissions"])
+
+    
+
 
 # If map is not already drawn then generate it
 #if not os.path.isfile('index.html'):   
